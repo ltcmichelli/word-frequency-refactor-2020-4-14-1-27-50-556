@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WordFrequencyGame {
 
@@ -18,13 +19,14 @@ public class WordFrequencyGame {
     }
 
     private List<WordInfo> calculateWordFrequency(String inputSentence) {
-        List<String> wordList = Arrays.asList(inputSentence.split(SPACE_PATTERN));
+        List<String> stringList = Arrays.asList(inputSentence.split(SPACE_PATTERN));
 
         List<WordInfo> wordInfoList = new ArrayList<>();
-        for (String word : new HashSet<>(wordList)) {
-            int wordCount = Collections.frequency(wordList, word);
-            wordInfoList.add(new WordInfo(word, wordCount));
-        }
+
+        stringList.stream().distinct().forEach(string -> {
+            int wordCount = Collections.frequency(stringList, string);
+            wordInfoList.add(new WordInfo(string, wordCount));
+        });
 
         wordInfoList.sort((firstWordInfo, secondWordInfo) -> secondWordInfo.getWordCount() - firstWordInfo.getWordCount());
         return wordInfoList;
