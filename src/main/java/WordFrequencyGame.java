@@ -14,32 +14,35 @@ public class WordFrequencyGame {
     public String getResult(String inputSentence) {
 
         try {
-
-            //split the input string with 1 to n pieces of spaces
-            String[] wordArray = inputSentence.split(SPACE_PATTERN);
-
-            List<WordInfo> wordInfoList = new ArrayList<>();
-            for (String word : wordArray) {
-                WordInfo wordInfo = new WordInfo(word, 1);
-                wordInfoList.add(wordInfo);
-            }
-
-            //get the map for the next step of sizing the same word
-            Map<String, List<WordInfo>> map = getWordFrequencyMap(wordInfoList);
-
-            List<WordInfo> list = new ArrayList<>();
-            for (Map.Entry<String, List<WordInfo>> entry : map.entrySet()) {
-                WordInfo wordInfo = new WordInfo(entry.getKey(), entry.getValue().size());
-                list.add(wordInfo);
-            }
-            wordInfoList = list;
-
-            wordInfoList.sort((firstWordInfo, secondWordInfo) -> secondWordInfo.getWordCount() - firstWordInfo.getWordCount());
-
+            List<WordInfo> wordInfoList = calculateWordFrequency(inputSentence);
             return formatWordFrequencyResult(wordInfoList);
         } catch (Exception exception) {
             return CALCULATE_ERROR;
         }
+    }
+
+    private List<WordInfo> calculateWordFrequency(String inputSentence) {
+        //split the input string with 1 to n pieces of spaces
+        String[] wordArray = inputSentence.split(SPACE_PATTERN);
+
+        List<WordInfo> wordInfoList = new ArrayList<>();
+        for (String word : wordArray) {
+            WordInfo wordInfo = new WordInfo(word, 1);
+            wordInfoList.add(wordInfo);
+        }
+
+        //get the map for the next step of sizing the same word
+        Map<String, List<WordInfo>> map = getWordFrequencyMap(wordInfoList);
+
+        List<WordInfo> list = new ArrayList<>();
+        for (Map.Entry<String, List<WordInfo>> entry : map.entrySet()) {
+            WordInfo wordInfo = new WordInfo(entry.getKey(), entry.getValue().size());
+            list.add(wordInfo);
+        }
+        wordInfoList = list;
+
+        wordInfoList.sort((firstWordInfo, secondWordInfo) -> secondWordInfo.getWordCount() - firstWordInfo.getWordCount());
+        return wordInfoList;
     }
 
     private String formatWordFrequencyResult(List<WordInfo> wordInfoList) {
